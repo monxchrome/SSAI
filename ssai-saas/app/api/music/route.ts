@@ -1,10 +1,10 @@
+import Replicate from "replicate";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-import Replicate from "replicate";
 
 const replicate = new Replicate({
-    auth: process.env.REPLICATE_API_TOKEN!
-})
+    auth: process.env.REPLICATE_API_TOKEN!,
+});
 
 export async function POST(
     req: Request
@@ -19,7 +19,7 @@ export async function POST(
         }
 
         if (!prompt) {
-            return new NextResponse("Messages are required", { status: 400 });
+            return new NextResponse("Prompt is required", { status: 400 });
         }
 
         const response = await replicate.run(
@@ -36,4 +36,4 @@ export async function POST(
         console.log('[MUSIC_ERROR]', error);
         return new NextResponse("Internal Error", { status: 500 });
     }
-}
+};
