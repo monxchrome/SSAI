@@ -19,6 +19,7 @@ import Loader from "@/components/loader";
 import {cn} from "@/lib/utils";
 import UserAvatar from "@/components/user-avatar";
 import BotAvatar from "@/components/bot-avatar";
+import {useProModal} from "@/hooks/use-pro-modal";
 
 const VideoPage = () => {
     const [video, setVideo] = useState<string>();
@@ -30,6 +31,8 @@ const VideoPage = () => {
         }
     })
 
+    const proModal = useProModal();
+
     const isLoading = form.formState.isSubmitting;
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -40,8 +43,10 @@ const VideoPage = () => {
 
             setVideo(response.data[0]);
             form.reset();
-        } catch (e) {
-            console.log(e);
+        } catch (e: any) {
+            if(e?.response?.status === 403) {
+                proModal.onOpen();
+            }
         } finally {
             router.refresh();
         }

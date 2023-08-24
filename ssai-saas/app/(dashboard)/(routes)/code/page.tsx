@@ -20,6 +20,7 @@ import {cn} from "@/lib/utils";
 import UserAvatar from "@/components/user-avatar";
 import BotAvatar from "@/components/bot-avatar";
 import ReactMarkdown from "react-markdown";
+import {useProModal} from "@/hooks/use-pro-modal";
 
 const CodePage = () => {
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
@@ -30,6 +31,8 @@ const CodePage = () => {
             prompt: ""
         }
     })
+
+    const proModal = useProModal();
 
     const isLoading = form.formState.isSubmitting;
 
@@ -48,8 +51,10 @@ const CodePage = () => {
             setMessages((current) => [...current, userMessage, response.data])
 
             form.reset();
-        } catch (e) {
-            console.log(e);
+        } catch (e: any) {
+            if(e?.response?.status === 403) {
+                proModal.onOpen();
+            }
         } finally {
             router.refresh();
         }

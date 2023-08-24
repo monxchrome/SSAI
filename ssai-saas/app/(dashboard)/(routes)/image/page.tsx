@@ -22,6 +22,7 @@ import BotAvatar from "@/components/bot-avatar";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Card, CardFooter} from "@/components/ui/card";
 import Image from "next/image";
+import {useProModal} from "@/hooks/use-pro-modal";
 
 const ImagePage = () => {
     const [images, setImages] = useState<string[]>([])
@@ -35,6 +36,8 @@ const ImagePage = () => {
         }
     })
 
+    const proModal = useProModal();
+
     const isLoading = form.formState.isSubmitting;
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -47,8 +50,10 @@ const ImagePage = () => {
 
             setImages(urls)
             form.reset();
-        } catch (e) {
-            console.log(e);
+        } catch (e: any) {
+            if(e?.response?.status === 403) {
+                proModal.onOpen();
+            }
         } finally {
             router.refresh();
         }
