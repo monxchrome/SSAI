@@ -1,9 +1,9 @@
 "use client";
 
-import {CrispChat} from "@/components/crisp-chat";
+import { CrispChat } from "@/components/crisp-chat";
 
 const CrispProvider = () => {
-    return <CrispChat />
+  return <CrispChat />;
 };
 
 export default CrispProvider;
